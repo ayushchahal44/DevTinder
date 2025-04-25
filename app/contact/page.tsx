@@ -61,7 +61,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <p className="text-sm font-medium">Email</p>
-                    <p className="text-sm text-muted-foreground">contact@devtinder.com</p>
+                    <p className="text-sm text-muted-foreground">ayushchahal44@gmail.com</p>
                   </div>
                 </div>
 
@@ -71,7 +71,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <p className="text-sm font-medium">Phone</p>
-                    <p className="text-sm text-muted-foreground">+1 (555) 123-4567</p>
+                    <p className="text-sm text-muted-foreground">+919760203187</p>
                   </div>
                 </div>
 
@@ -82,9 +82,9 @@ export default function ContactPage() {
                   <div>
                     <p className="text-sm font-medium">Address</p>
                     <p className="text-sm text-muted-foreground">
-                      123 Developer Way
+                      Gyan Vihar colony
                       <br />
-                      San Francisco, CA 94107
+                      Bijnor, UP 246701
                     </p>
                   </div>
                 </div>
@@ -96,15 +96,15 @@ export default function ContactPage() {
                   <div>
                     <p className="text-sm font-medium">Social</p>
                     <div className="flex gap-2 mt-1">
-                      <a href="#" className="text-gray-500 hover:text-purple-600">
+                      <a href="https://x.com/ayush_chahal44" className="text-gray-500 hover:text-purple-600">
                         Twitter
                       </a>
                       <span className="text-gray-300">•</span>
-                      <a href="#" className="text-gray-500 hover:text-purple-600">
+                      <a href="https://github.com/ayushchahal44" className="text-gray-500 hover:text-purple-600">
                         GitHub
                       </a>
                       <span className="text-gray-300">•</span>
-                      <a href="#" className="text-gray-500 hover:text-purple-600">
+                      <a href="https://linkedin.com/in/ayush-chahal" className="text-gray-500 hover:text-purple-600">
                         LinkedIn
                       </a>
                     </div>

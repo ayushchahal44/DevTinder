@@ -7,10 +7,12 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm ci
+RUN npm ci --legacy-peer-deps
 
 # Copy the rest of the frontend code
 COPY . .
+
+RUN npm install -g pnpm
 
 # Build the Next.js app
 RUN npm run build

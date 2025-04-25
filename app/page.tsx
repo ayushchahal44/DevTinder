@@ -19,7 +19,7 @@ export default function Home() {
                 <Button asChild size="lg" className="bg-white text-purple-600 hover:bg-gray-100">
                   <Link href="/signup">Get Started</Link>
                 </Button>
-                <Button asChild variant="outline" size="lg" className="border-white text-white hover:bg-white/10">
+                <Button asChild variant="outline" size="lg" className="border-white text-black hover:bg-white/10">
                   <Link href="/login">Sign In</Link>
                 </Button>
               </div>
