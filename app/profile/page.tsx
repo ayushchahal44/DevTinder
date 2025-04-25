@@ -1,6 +1,8 @@
 "use client"
 
-import { useState } from "react"
+import type React from "react"
+
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -10,10 +12,50 @@ import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Github, Linkedin, Twitter, X } from "lucide-react"
+import { useAuth } from "@/context/auth-context"
+import { GitHubRepositories } from "@/components/github-repositories"
+import { useToast } from "@/components/ui/use-toast"
 
 export default function ProfilePage() {
-  const [skills, setSkills] = useState(["React", "TypeScript", "Node.js", "Docker"])
+  const { user } = useAuth()
+  const { toast } = useToast()
+  const [skills, setSkills] = useState<string[]>(user?.skills || ["React", "TypeScript", "Node.js", "Docker"])
   const [newSkill, setNewSkill] = useState("")
+  const [profileData, setProfileData] = useState({
+    name: user?.name || "",
+    email: user?.email || "",
+    title: user?.title || "",
+    bio: user?.bio || "",
+    location: user?.location || "",
+    githubUrl: user?.githubUrl || "",
+    experience: "",
+    education: "",
+    lookingFor: "",
+    projectInterests: "",
+    availability: "",
+  })
+  const [isSaving, setIsSaving] = useState(false)
+
+  useEffect(() => {
+    if (user) {
+      setProfileData({
+        name: user.name || "",
+        email: user.email || "",
+        title: user.title || "",
+        bio: user.bio || "",
+        location: user.location || "",
+        githubUrl: user.githubUrl || "",
+        experience: "",
+        education: "",
+        lookingFor: "",
+        projectInterests: "",
+        availability: "",
+      })
+      if (user.skills) {
+        setSkills(user.skills)
+      }
+    }
+  }, [user])
 
   const addSkill = () => {
     if (newSkill && !skills.includes(newSkill)) {
@@ -26,6 +68,37 @@ export default function ProfilePage() {
     setSkills(skills.filter((skill) => skill !== skillToRemove))
   }
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target
+    setProfileData((prev) => ({ ...prev, [name]: value }))
+  }
+
+  const handleSaveProfile = () => {
+    setIsSaving(true)
+
+    // Simulate API call
+    setTimeout(() => {
+      // In a real app, you would update the user profile in your backend
+      toast({
+        title: "Profile updated",
+        description: "Your profile has been updated successfully.",
+      })
+      setIsSaving(false)
+    }, 1000)
+  }
+
+  if (!user) {
+    return (
+      <div className="container mx-auto px-4 py-16 text-center">
+        <h1 className="text-3xl font-bold mb-4">Profile</h1>
+        <p className="mb-6">Please log in to view your profile.</p>
+        <Button asChild>
+          <a href="/login">Log In</a>
+        </Button>
+      </div>
+    )
+  }
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
@@ -36,30 +109,32 @@ export default function ProfilePage() {
             <Card>
               <CardHeader className="text-center">
                 <Avatar className="h-24 w-24 mx-auto">
-                  <AvatarImage src="/placeholder.svg?height=100&width=100" alt="Profile" />
-                  <AvatarFallback>JD</AvatarFallback>
+                  <AvatarImage src={user.avatar || "/placeholder.svg?height=100&width=100"} alt="Profile" />
+                  <AvatarFallback>{user.name?.charAt(0) || "U"}</AvatarFallback>
                 </Avatar>
-                <CardTitle className="mt-4">John Doe</CardTitle>
-                <CardDescription>Full Stack Developer</CardDescription>
+                <CardTitle className="mt-4">{user.name}</CardTitle>
+                <CardDescription>{profileData.title || "Developer"}</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
                   <div>
                     <h3 className="text-sm font-medium text-gray-500">Location</h3>
-                    <p>San Francisco, CA</p>
+                    <p>{profileData.location || "Not specified"}</p>
                   </div>
                   <div>
                     <h3 className="text-sm font-medium text-gray-500">Member Since</h3>
-                    <p>January 2023</p>
+                    <p>{new Date().toLocaleDateString()}</p>
                   </div>
                   <div>
                     <h3 className="text-sm font-medium text-gray-500">Social Links</h3>
                     <div className="flex space-x-2 mt-2">
-                      <Button variant="outline" size="icon" asChild>
-                        <a href="#" target="_blank" rel="noopener noreferrer">
-                          <Github className="h-4 w-4" />
-                        </a>
-                      </Button>
+                      {profileData.githubUrl && (
+                        <Button variant="outline" size="icon" asChild>
+                          <a href={profileData.githubUrl} target="_blank" rel="noopener noreferrer">
+                            <Github className="h-4 w-4" />
+                          </a>
+                        </Button>
+                      )}
                       <Button variant="outline" size="icon" asChild>
                         <a href="#" target="_blank" rel="noopener noreferrer">
                           <Linkedin className="h-4 w-4" />
@@ -75,6 +150,12 @@ export default function ProfilePage() {
                 </div>
               </CardContent>
             </Card>
+
+            {profileData.githubUrl && (
+              <div className="mt-6">
+                <GitHubRepositories githubUrl={profileData.githubUrl} />
+              </div>
+            )}
           </div>
 
           <div className="md:col-span-2">
@@ -95,35 +176,36 @@ export default function ProfilePage() {
                     <form className="space-y-4">
                       <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
-                          <Label htmlFor="firstName">First Name</Label>
-                          <Input id="firstName" defaultValue="John" />
+                          <Label htmlFor="name">Full Name</Label>
+                          <Input id="name" name="name" value={profileData.name} onChange={handleChange} />
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="lastName">Last Name</Label>
-                          <Input id="lastName" defaultValue="Doe" />
+                          <Label htmlFor="email">Email</Label>
+                          <Input
+                            id="email"
+                            name="email"
+                            type="email"
+                            value={profileData.email}
+                            onChange={handleChange}
+                            disabled
+                          />
                         </div>
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="email">Email</Label>
-                        <Input id="email" type="email" defaultValue="john.doe@example.com" />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="title">Professional Title</Label>
-                        <Input id="title" defaultValue="Full Stack Developer" />
+                        <Input id="title" name="title" value={profileData.title} onChange={handleChange} />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="location">Location</Label>
-                        <Input id="location" defaultValue="San Francisco, CA" />
+                        <Input id="location" name="location" value={profileData.location} onChange={handleChange} />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="bio">Bio</Label>
-                        <Textarea
-                          id="bio"
-                          defaultValue="Full stack developer with 5 years of experience building web applications. Passionate about clean code and containerization."
-                          rows={4}
-                        />
+                        <Textarea id="bio" name="bio" value={profileData.bio} onChange={handleChange} rows={4} />
                       </div>
-                      <Button type="button">Save Changes</Button>
+                      <Button type="button" onClick={handleSaveProfile} disabled={isSaving}>
+                        {isSaving ? "Saving..." : "Save Changes"}
+                      </Button>
                     </form>
                   </CardContent>
                 </Card>
@@ -169,7 +251,10 @@ export default function ProfilePage() {
                         <Label htmlFor="experience">Work Experience</Label>
                         <Textarea
                           id="experience"
-                          defaultValue="Senior Developer at Acme Inc. (2020-Present)
+                          name="experience"
+                          value={profileData.experience}
+                          onChange={handleChange}
+                          placeholder="Senior Developer at Acme Inc. (2020-Present)
 Frontend Developer at Tech Solutions (2018-2020)"
                           rows={4}
                         />
@@ -179,17 +264,28 @@ Frontend Developer at Tech Solutions (2018-2020)"
                         <Label htmlFor="education">Education</Label>
                         <Textarea
                           id="education"
-                          defaultValue="B.S. Computer Science, University of California (2014-2018)"
+                          name="education"
+                          value={profileData.education}
+                          onChange={handleChange}
+                          placeholder="B.S. Computer Science, University of California (2014-2018)"
                           rows={2}
                         />
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="github">GitHub Profile URL</Label>
-                        <Input id="github" defaultValue="https://github.com/johndoe" />
+                        <Label htmlFor="githubUrl">GitHub Profile URL</Label>
+                        <Input
+                          id="githubUrl"
+                          name="githubUrl"
+                          value={profileData.githubUrl}
+                          onChange={handleChange}
+                          placeholder="https://github.com/username"
+                        />
                       </div>
 
-                      <Button type="button">Save Changes</Button>
+                      <Button type="button" onClick={handleSaveProfile} disabled={isSaving}>
+                        {isSaving ? "Saving..." : "Save Changes"}
+                      </Button>
                     </div>
                   </CardContent>
                 </Card>
@@ -207,7 +303,10 @@ Frontend Developer at Tech Solutions (2018-2020)"
                         <Label htmlFor="lookingFor">I'm looking for</Label>
                         <Textarea
                           id="lookingFor"
-                          defaultValue="I'm looking for developers to collaborate on open source projects related to containerization and cloud infrastructure."
+                          name="lookingFor"
+                          value={profileData.lookingFor}
+                          onChange={handleChange}
+                          placeholder="I'm looking for developers to collaborate on open source projects related to containerization and cloud infrastructure."
                           rows={4}
                         />
                       </div>
@@ -216,7 +315,10 @@ Frontend Developer at Tech Solutions (2018-2020)"
                         <Label htmlFor="projectInterests">Project Interests</Label>
                         <Textarea
                           id="projectInterests"
-                          defaultValue="Web applications, DevOps, Cloud infrastructure, Containerization"
+                          name="projectInterests"
+                          value={profileData.projectInterests}
+                          onChange={handleChange}
+                          placeholder="Web applications, DevOps, Cloud infrastructure, Containerization"
                           rows={2}
                         />
                       </div>
@@ -225,12 +327,17 @@ Frontend Developer at Tech Solutions (2018-2020)"
                         <Label htmlFor="availability">Availability</Label>
                         <Textarea
                           id="availability"
-                          defaultValue="Available for part-time collaboration, evenings and weekends."
+                          name="availability"
+                          value={profileData.availability}
+                          onChange={handleChange}
+                          placeholder="Available for part-time collaboration, evenings and weekends."
                           rows={2}
                         />
                       </div>
 
-                      <Button type="button">Save Preferences</Button>
+                      <Button type="button" onClick={handleSaveProfile} disabled={isSaving}>
+                        {isSaving ? "Saving..." : "Save Preferences"}
+                      </Button>
                     </form>
                   </CardContent>
                 </Card>

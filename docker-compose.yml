@@ -24,10 +24,12 @@ services:
       dockerfile: Dockerfile
     ports:
       - "4000:4000"
+      - "4000:4000/udp"  # For WebSocket connections
     environment:
       - NODE_ENV=production
       - MONGODB_URI=mongodb://mongodb:27017/devtinder
       - JWT_SECRET=your_jwt_secret_key_here
+      - FRONTEND_URL=http://frontend:3000
     depends_on:
       - mongodb
     networks:

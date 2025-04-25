@@ -58,12 +58,15 @@
     "tailwindcss-animate": "^1.0.7",
     "vaul": "^0.9.6",
     "zod": "^3.24.1",
-    "express": "latest",
-    "cors": "latest",
     "mongoose": "latest",
-    "dotenv": "latest",
     "bcryptjs": "latest",
-    "jsonwebtoken": "latest"
+    "express": "latest",
+    "jsonwebtoken": "latest",
+    "socket.io-client": "latest",
+    "cors": "latest",
+    "dotenv": "latest",
+    "http": "latest",
+    "socket.io": "latest"
   },
   "devDependencies": {
     "@types/node": "^22",
