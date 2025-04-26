@@ -66,10 +66,10 @@ DevTinder is a modern web application designed to help developers connect, colla
 1. **Clone the Repository**
    ```bash
    # Clone the repository
-   git clone https://github.com/yourusername/devtinder.git
+   git clone https://github.com/yourusername/DevTinder.git
    
    # Navigate to the project directory
-   cd devtinder
+   cd DevTinder
    ```
 
 2. **Install Dependencies**
@@ -170,7 +170,7 @@ DevTinder is a modern web application designed to help developers connect, colla
 ## Project Structure
 
 ```
-devtinder/
+DevTinder/
 ├── app/                    # Next.js app directory
 │   ├── api/               # API routes
 │   ├── discover/          # Discovery page
