@@ -2,25 +2,13 @@ jenkins:
   systemMessage: "DevTinder CI/CD Pipeline"
   numExecutors: 2
   mode: NORMAL
-  scmCheckoutRetryCount: 3
 
 plugins:
   required:
-    - docker-workflow
     - pipeline
     - git
     - nodejs
-    - credentials
-    - ssh-agent
-    - docker-build-step
-    - windows-slaves
-
-credentials:
-  docker:
-    - id: "docker-credentials"
-      description: "Docker Registry Credentials"
-      username: "${DOCKER_USERNAME}"
-      password: "${DOCKER_PASSWORD}"
+    - docker-workflow
 
 nodejs:
   installations:
@@ -31,14 +19,10 @@ nodejs:
             installers:
               - nodeJSInstaller:
                   id: "18.x"
-                  npmPackagesRefreshHours: 24
-                  force32Bit: false
 
 environment:
   variables:
     - key: "NODE_ENV"
       value: "production"
     - key: "DOCKER_HOST"
-      value: "npipe:////./pipe/docker_engine"
-    - key: "PATH"
-      value: "C:\\Program Files\\nodejs;C:\\Program Files\\Docker\\Docker\\resources\\bin;%PATH%" 
+      value: "npipe:////./pipe/docker_engine" 

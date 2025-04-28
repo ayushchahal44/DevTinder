@@ -2,6 +2,7 @@ pipeline {
     agent any
     
     environment {
+        NODE_VERSION = '18.x'
         DOCKER_IMAGE = 'devtinder'
         DOCKER_TAG = "${env.BUILD_NUMBER}"
         DOCKER_REGISTRY = 'your-docker-registry' // Update this with your registry
@@ -34,8 +35,7 @@ pipeline {
         
         stage('Test') {
             steps {
-                // Add your test command here when tests are implemented
-                echo 'Tests will be added here'
+                bat 'npm test'
             }
         }
         
@@ -60,7 +60,6 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    // Update your deployment configuration
                     bat 'docker-compose down'
                     bat 'docker-compose up -d'
                 }
@@ -70,7 +69,6 @@ pipeline {
     
     post {
         always {
-            // Clean up workspace
             cleanWs()
         }
         success {
