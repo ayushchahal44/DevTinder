@@ -20,13 +20,6 @@ pipeline {
             }
         }
         
-        // Skip the lint stage
-        // stage('Lint') {
-        //     steps {
-        //         bat 'npm run lint'
-        //     }
-        // }
-        
         stage('Build') {
             steps {
                 bat 'npm run build'
@@ -50,6 +43,7 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
+                    // Use withRegistry to avoid login issues
                     docker.withRegistry('https://registry.hub.docker.com', 'docker-credentials') {
                         docker.image("${DOCKER_IMAGE}:${DOCKER_TAG}").push()
                     }
