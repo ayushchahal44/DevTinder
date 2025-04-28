@@ -43,8 +43,8 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    // Use withRegistry to avoid login issues
-                    docker.withRegistry('https://registry.hub.docker.com', 'docker-credentials') {
+                    withCredentials([usernamePassword(credentialsId: 'docker-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
                         docker.image("${DOCKER_IMAGE}:${DOCKER_TAG}").push()
                     }
                 }
