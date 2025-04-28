@@ -27,11 +27,11 @@ ENV NODE_ENV=production
 
 # Copy built assets from the builder stage
 COPY --from=frontend-builder /app/public ./public
-COPY --from=frontend-builder /app/.next/standalone ./ .next/standalone
+COPY --from=frontend-builder /app/.next/standalone ./.next/standalone
 COPY --from=frontend-builder /app/.next/static ./.next/static
 
 # Expose the port the app will run on
 EXPOSE 3000
 
 # Start the application
-CMD ["node", "server.js"]
+CMD ["node", ".next/standalone/server.js"]
