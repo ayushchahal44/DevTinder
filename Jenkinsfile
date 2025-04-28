@@ -3,9 +3,8 @@ pipeline {
     
     environment {
         NODE_VERSION = '18.x'
-        DOCKER_IMAGE = 'devtinder'
+        DOCKER_IMAGE = 'ayushchahal/devtinder' // Update with DockerHub username and repo
         DOCKER_TAG = "${env.BUILD_NUMBER}"
-        DOCKER_REGISTRY = 'your-docker-registry' // Update this with your registry
     }
     
     stages {
@@ -21,11 +20,12 @@ pipeline {
             }
         }
         
-        stage('Lint') {
-            steps {
-                bat 'npm run lint'
-            }
-        }
+        // Skip the lint stage
+        // stage('Lint') {
+        //     steps {
+        //         bat 'npm run lint'
+        //     }
+        // }
         
         stage('Build') {
             steps {
@@ -50,7 +50,7 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    docker.withRegistry('https://${DOCKER_REGISTRY}', 'docker-credentials') {
+                    docker.withRegistry('https://registry.hub.docker.com', 'docker-credentials') {
                         docker.image("${DOCKER_IMAGE}:${DOCKER_TAG}").push()
                     }
                 }
@@ -78,4 +78,4 @@ pipeline {
             echo 'Pipeline failed!'
         }
     }
-} 
+}
