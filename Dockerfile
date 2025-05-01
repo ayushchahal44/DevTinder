@@ -31,7 +31,7 @@ COPY --from=frontend-builder /app/.next/standalone ./.next/standalone
 COPY --from=frontend-builder /app/.next/static ./.next/static
 
 # Expose the port the app will run on
-EXPOSE 3000
+EXPOSE 3001
 
 # Start the application
 CMD ["node", ".next/standalone/server.js"]
