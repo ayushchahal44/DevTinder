@@ -7,10 +7,11 @@ services:
       context: .  # Root directory (where the Dockerfile is)
       dockerfile: Dockerfile  # The Dockerfile in the frontend folder
     ports:
-      - "3000:3000"
+      - "3001:3001"
     environment:
       - NODE_ENV=production
-      - NEXT_PUBLIC_API_URL=http://backend:4000  # Backend URL for the frontend
+      - PORT=3001
+      - NEXT_PUBLIC_API_URL=http://localhost:4000  # Backend URL for the frontend
     depends_on:
       - backend  # Ensures backend starts before frontend
     networks:
@@ -29,7 +30,7 @@ services:
       - NODE_ENV=production
       - MONGODB_URI=mongodb://mongodb:27017/devtinder  # MongoDB URI for backend
       - JWT_SECRET=your_jwt_secret_key_here  # Ensure you set a secure key
-      - FRONTEND_URL=http://frontend:3000  # URL of the frontend service
+      - FRONTEND_URL=http://localhost:3001  # URL of the frontend service
     depends_on:
       - mongodb  # Ensures MongoDB starts before backend
     networks:

@@ -166,7 +166,7 @@ export default function Home() {
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-4 md:mb-0">
               <h3 className="text-xl font-bold text-white">DevTinder</h3>
-              <p className="text-sm">© 2023 DevTinder. All rights reserved.</p>
+              <p className="text-sm">© 2025 DevTinder. All rights reserved.</p>
             </div>
             <div className="flex space-x-6">
               <Link href="/about" className="hover:text-white">

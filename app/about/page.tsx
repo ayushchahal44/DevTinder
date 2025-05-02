@@ -71,7 +71,7 @@ export default function AboutPage() {
           </CardHeader>
           <CardContent>
             <p className="mb-4">
-              DevTinder was founded in 2023 by a group of developers who were frustrated with the challenge of finding
+              DevTinder was founded in 2025 by a group of developers who were frustrated with the challenge of finding
               suitable project partners. Traditional networking platforms weren't tailored to the unique needs of
               developers, and existing developer communities lacked the matchmaking capabilities needed to form
               effective partnerships.

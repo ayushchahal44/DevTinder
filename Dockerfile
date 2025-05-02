@@ -1,37 +1,37 @@
-# Frontend Dockerfile
-
 # Build stage
-FROM node:18-alpine AS frontend-builder
+FROM node:18-alpine AS builder
 
 WORKDIR /app
 
-# Copy package.json and package-lock.json
+# Copy package files
 COPY package*.json ./
 
 # Install dependencies
-RUN npm ci --legacy-peer-deps
+RUN npm ci
 
-# Copy the rest of the frontend code
+# Copy source code
 COPY . .
 
-# Build the Next.js app
+# Build the application
 RUN npm run build
 
-# Production image
+# Production stage
 FROM node:18-alpine AS runner
 
 WORKDIR /app
 
-# Set to production environment
 ENV NODE_ENV=production
+ENV PORT=3001
 
-# Copy built assets from the builder stage
-COPY --from=frontend-builder /app/public ./public
-COPY --from=frontend-builder /app/.next/standalone ./.next/standalone
-COPY --from=frontend-builder /app/.next/static ./.next/static
+# Copy production node_modules
+COPY --from=builder /app/node_modules ./node_modules
 
-# Expose the port the app will run on
+# Copy standalone server and required files
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/next.config.js ./
+
 EXPOSE 3001
 
-# Start the application
-CMD ["node", ".next/standalone/server.js"]
+CMD ["node", "server.js"]
